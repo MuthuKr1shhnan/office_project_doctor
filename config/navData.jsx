@@ -3,10 +3,7 @@ export const menu = [
     label: "Home",
     link: "/",
   },
-  {
-    label: "Doctors",
-    link: "/doctors",
-  },
+
   {
     label: "Patients",
     link: "/patients",

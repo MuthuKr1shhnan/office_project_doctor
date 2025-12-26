@@ -11,6 +11,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { doc, getDoc } from "firebase/firestore";
 import { menu, login, account } from "../config/navData";
+import { Doctor as doctor } from "../assets/icon";
 
 export default function Nav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,7 +60,8 @@ export default function Nav() {
     <nav className='bg-white  border-b border-slate-200 sticky top-0 z-50'>
       <div className=' flex flex-wrap items-center justify-between p-3 pr-8 pl-8'>
         {/* Brand */}
-        <Link href='/'>
+        <Link href='/' className=' flex gap-2 items-center'>
+          <Image src={doctor} alt='Logo' className='h-10 w-auto' />
           <Image src={logo} alt='Logo' className='h-8 w-auto' />
         </Link>
 

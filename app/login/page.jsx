@@ -92,7 +92,8 @@ const Page = () => {
       await setDoc(doc(db, "tempUsers", result.user.uid), {
         uid: result.user.uid,
         email: values.email,
-        role: values.role,
+        role: "doctor",
+
         displayName: values.name,
         phoneNumber: `+${values.phone}`,
         address: values.address,

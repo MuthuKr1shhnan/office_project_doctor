@@ -22,7 +22,7 @@ export const Register = ({
         email: "",
         password: "",
         confirmPassword: "",
-        role: "",
+        role: "doctor",
         fee: "",
         phone: "",
         address: "",
@@ -67,75 +67,31 @@ export const Register = ({
             />
           </div>
 
-          {/* Email */}
-          <div>
-            <label className='block text-xs text-gray-600 mb-1'>Email *</label>
-            <Field
-              type='email'
-              name='email'
-              autoComplete='email'
-              value={values.email}
-              className={`w-full text-sm bg-white border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                errors.email && touched.email
-                  ? "border-red-300"
-                  : "border-gray-200"
-              }`}
-              placeholder='you@example.com'
-            />
-            <ErrorMessage
-              name='email'
-              component='div'
-              className='text-xs text-red-600 mt-1'
-            />
-          </div>
-
-          {/* Role Selection */}
-          <div>
-            <label className='block text-xs text-gray-600 mb-2'>I am a *</label>
-            <div className='flex gap-3'>
-              <label
-                className={`flex-1 flex items-center justify-center p-3 border-2 rounded-lg cursor-pointer transition-all ${
-                  values.role === "patient"
-                    ? "border-blue-500 bg-blue-50"
-                    : "border-gray-200 hover:bg-gray-50"
-                }`}
-              >
-                <Field
-                  type='radio'
-                  name='role'
-                  value='patient'
-                  className='sr-only'
-                />
-                <span className='text-sm font-medium text-gray-700'>
-                  Patient
-                </span>
+          {/* Degree (only for doctors) */}
+          {values.role === "doctor" && (
+            <div>
+              <label className='block text-xs text-gray-600 mb-1'>
+                Degree *
               </label>
-
-              <label
-                className={`flex-1 flex items-center justify-center p-3 border-2 rounded-lg cursor-pointer transition-all ${
-                  values.role === "doctor"
-                    ? "border-blue-500 bg-blue-50"
-                    : "border-gray-200 hover:bg-gray-50"
+              <Field
+                type='text'
+                name='degree'
+                autoComplete='off'
+                value={values.degree}
+                className={`w-full text-sm bg-white border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  errors.degree && touched.degree
+                    ? "border-red-300"
+                    : "border-gray-200"
                 }`}
-              >
-                <Field
-                  type='radio'
-                  name='role'
-                  value='doctor'
-                  className='sr-only'
-                />
-                <span className='text-sm font-medium text-gray-700'>
-                  Doctor
-                </span>
-              </label>
+                placeholder='MBBS, MD, etc.'
+              />
+              <ErrorMessage
+                name='degree'
+                component='div'
+                className='text-xs text-red-600 mt-1'
+              />
             </div>
-            <ErrorMessage
-              name='role'
-              component='div'
-              className='text-xs text-red-600 mt-1'
-            />
-          </div>
-
+          )}
           {/* Consultation Fee (only for doctors) */}
           {values.role === "doctor" && (
             <div>
@@ -161,6 +117,27 @@ export const Register = ({
               />
             </div>
           )}
+          {/* Email */}
+          <div>
+            <label className='block text-xs text-gray-600 mb-1'>Email *</label>
+            <Field
+              type='email'
+              name='email'
+              autoComplete='email'
+              value={values.email}
+              className={`w-full text-sm bg-white border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                errors.email && touched.email
+                  ? "border-red-300"
+                  : "border-gray-200"
+              }`}
+              placeholder='you@example.com'
+            />
+            <ErrorMessage
+              name='email'
+              component='div'
+              className='text-xs text-red-600 mt-1'
+            />
+          </div>
 
           {/* Phone Number */}
           <div>
@@ -229,32 +206,6 @@ export const Register = ({
               className='text-xs text-red-600 mt-1'
             />
           </div>
-
-          {/* Degree (only for doctors) */}
-          {values.role === "doctor" && (
-            <div>
-              <label className='block text-xs text-gray-600 mb-1'>
-                Degree *
-              </label>
-              <Field
-                type='text'
-                name='degree'
-                autoComplete='off'
-                value={values.degree}
-                className={`w-full text-sm bg-white border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  errors.degree && touched.degree
-                    ? "border-red-300"
-                    : "border-gray-200"
-                }`}
-                placeholder='MBBS, MD, etc.'
-              />
-              <ErrorMessage
-                name='degree'
-                component='div'
-                className='text-xs text-red-600 mt-1'
-              />
-            </div>
-          )}
 
           {/* Password */}
           <div>
