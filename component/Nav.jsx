@@ -84,7 +84,7 @@ export default function Nav() {
 
         {/* Actions */}
         <div className='hidden md:flex items-center space-x-4'>
-          {otpVerified ? (
+          {otpVerified && user ? (
             <Btn
               onClick={() => {
                 setIsOpen(false);
@@ -96,7 +96,6 @@ export default function Nav() {
             </Btn>
           ) : (
             <Btn variant='primary'>
-              {" "}
               <Link href={login.path}>{login.label}</Link>
             </Btn>
           )}
@@ -165,15 +164,23 @@ export default function Nav() {
                     {m.label}
                   </Link>
                 ))}
-                <Btn
-                  onClick={() => {
-                    setIsOpen(false);
-                    setIsOpenDrawer(true);
-                  }}
-                  variant='primary'
-                >
-                  {account.label}
-                </Btn>
+                <div className='flex w-full flex-col gap-2'>
+                  {otpVerified && user ? (
+                    <Btn
+                      onClick={() => {
+                        setIsOpen(false);
+                        setIsOpenDrawer(true);
+                      }}
+                      variant='primary'
+                    >
+                      {account.label}
+                    </Btn>
+                  ) : (
+                    <Btn variant='primary'>
+                      <Link href={login.path}>{login.label}</Link>
+                    </Btn>
+                  )}
+                </div>
               </div>
             </div>
           </div>
