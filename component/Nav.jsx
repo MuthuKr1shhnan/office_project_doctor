@@ -18,6 +18,7 @@ export default function Nav() {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [user, setUser] = useState(null);
   const [otpVerified, setOtpVerified] = useState(false);
+  const [roleVerified, setRoleVerified] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   // 🔐 Check auth state and get user role
@@ -33,6 +34,9 @@ export default function Nav() {
           const userDoc = await getDoc(userDocRef);
           if (userDoc.exists()) {
             setOtpVerified(true);
+          }
+          if (userDoc.data().role === "doctor") {
+            setRoleVerified(true);
           }
         } catch (err) {
           console.error("Error fetching user role:", err);
@@ -84,7 +88,7 @@ export default function Nav() {
 
         {/* Actions */}
         <div className='hidden md:flex items-center space-x-4'>
-          {otpVerified && user ? (
+          {otpVerified && user && roleVerified ? (
             <Btn
               onClick={() => {
                 setIsOpen(false);
@@ -165,7 +169,7 @@ export default function Nav() {
                   </Link>
                 ))}
                 <div className='flex w-full flex-col gap-2'>
-                  {otpVerified && user ? (
+                  {otpVerified && user && roleVerified ? (
                     <Btn
                       onClick={() => {
                         setIsOpen(false);

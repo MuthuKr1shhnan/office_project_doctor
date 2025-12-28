@@ -1,8 +1,9 @@
 "use client";
 
 import Nav from "../component/Nav";
-import Loader from "../component/Loader"
+import Loader from "../component/Loader";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 export default function RootLayout({
   children,
@@ -15,9 +16,10 @@ export default function RootLayout({
         className='w-full bg-gray-50'
         style={{ height: "calc(100vh - 65px)" }}
       >
-        <Loader/>
+        <Loader />
         <Nav />
         {children}
+        <Toaster richColors />
       </body>
     </html>
   );

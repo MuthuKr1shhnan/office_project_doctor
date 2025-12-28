@@ -9,6 +9,10 @@ export const menu = [
     link: "/patients",
   },
   {
+    label: "Chat",
+    link: "/chat",
+  },
+  {
     label: "Wallet",
     link: "/wallet",
   },

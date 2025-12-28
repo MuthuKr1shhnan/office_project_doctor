@@ -12,3 +12,33 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 input[type="password"] {
     -moz-appearance: textfield;
 }
+
+/* Base toast */
+[data-sonner-toast] {
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+/* Success */
+[data-sonner-toast][data-type="success"] {
+  background: #16a34a; /* green-600 */
+  color: white;
+}
+
+/* Error */
+[data-sonner-toast][data-type="error"] {
+  background: #dc2626; /* red-600 */
+  color: white;
+}
+
+/* Warning */
+[data-sonner-toast][data-type="warning"] {
+  background: #f59e0b; /* amber-500 */
+  color: black;
+}
+
+/* Info */
+[data-sonner-toast][data-type="info"] {
+  background: #2563eb; /* blue-600 */
+  color: white;
+}

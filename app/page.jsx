@@ -8,7 +8,6 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
 export default function Home() {
   const [loading, setLoading] = useState(true);
 
@@ -50,6 +49,8 @@ export default function Home() {
         <h1 className='text-2xl md:text-4xl lg:text-5xl font-bold text-white drop-shadow-lg'>
           Doctor vs Patient
         </h1>
+      
+      
 
         <p className='mt-4 text-sm md:text-lg lg:text-xl text-white max-w-xl'>
           Connecting healthcare professionals with patients anytime, anywhere.

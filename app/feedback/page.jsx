@@ -3,6 +3,7 @@
 import { useState } from "react";
 import emailjs from "emailjs-com";
 import Btn from "@/component/Btn";
+import { toast } from "sonner";
 export default function FeedbackForm() {
   
   const [formData, setFormData] = useState({
@@ -35,7 +36,7 @@ export default function FeedbackForm() {
         process.env.NEXT_PUBLIC_KEY
       )
       .then(() => {
-        alert("Message sent successfully.");
+        toast("Message sent successfully.");
         setFormData({ email: "", message: "" });
       })
       .catch(() => {

@@ -6,6 +6,7 @@ import Btn from "@/component/Btn";
 import { updateProfile, updatePassword, deleteUser } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
 import { doc, getDoc, setDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { toast } from "sonner";
 
 export default function ProfileDrawer({ isOpen, onClose, user, onLogout }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -212,7 +213,7 @@ export default function ProfileDrawer({ isOpen, onClose, user, onLogout }) {
       }, 2000);
     } catch (error) {
       console.error("Update error:", error);
-      alert(error.message);
+      toast(error.message);
     }
   };
 
@@ -282,7 +283,7 @@ export default function ProfileDrawer({ isOpen, onClose, user, onLogout }) {
       await deleteDoc(ref); // Delete Firebase Auth account
       await deleteUser(currentUser);
 
-      alert("Account deleted successfully");
+      toast("Account deleted successfully");
       onClose();
       window.location.href = "/";
     } catch (error) {
