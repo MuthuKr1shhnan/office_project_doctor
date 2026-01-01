@@ -226,7 +226,7 @@ export const Register = ({
                   autoComplete='new-password'
                   onFocus={() => setList(true)}
                   onBlur={() => setList(false)}
-                  value={"User0000000$"}
+                  value={values.password}
                   className='w-full text-sm rounded-lg px-3 outline-none '
                   placeholder='Choose a password'
                 />
@@ -288,7 +288,7 @@ export const Register = ({
               type='password'
               name='confirmPassword'
               autoComplete='new-password'
-              value={"User0000000$"}
+              value={values.confirmPassword}
               className={`w-full text-sm bg-white border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 errors.confirmPassword && touched.confirmPassword
                   ? "border-red-300"
