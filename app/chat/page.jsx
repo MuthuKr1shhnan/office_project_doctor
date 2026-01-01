@@ -14,7 +14,9 @@ import {
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 
-const socket = io("http://localhost:5000");
+const socket = io("https://office-task-backend.onrender.com", {
+  transports: ["websocket"],
+});
 
 export default function DoctorChat() {
   const [user, setUser] = useState(null);
