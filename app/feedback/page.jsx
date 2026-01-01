@@ -50,7 +50,7 @@ export default function FeedbackForm() {
   return (
     <section
       className=' flex items-center justify-center px-4'
-      style={{ height: "calc(100vh - 65px)" }}
+      style={{ height: "calc(100dvh)" }}
     >
       <form
         onSubmit={handleSubmit}

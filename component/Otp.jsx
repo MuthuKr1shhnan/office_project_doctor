@@ -7,7 +7,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, setDoc, getDoc, deleteDoc, updateDoc } from "firebase/firestore";
 import "../app/globals.css";
 
-const OTP_EXPIRY_SECONDS = 15;
+const OTP_EXPIRY_SECONDS = 60;
 const MAX_ATTEMPTS = 3;
 const MAX_ATTEMPTS_RESEND = 3;
 const BLOCK_DURATION_SECONDS = 300;

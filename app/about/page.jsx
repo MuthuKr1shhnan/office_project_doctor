@@ -4,7 +4,7 @@ const AboutPage = () => {
   return (
     <main
       className=' px-6 py-12 flex  items-center justify-center'
-      style={{ height: "calc(100vh - 65px)" }}
+      style={{ height: "calc(100dvh)" }}
     >
       <div className='max-w-3xl w-full space-y-10'>
         {/* Title */}

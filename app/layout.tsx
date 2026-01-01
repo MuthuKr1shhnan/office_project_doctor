@@ -3,7 +3,6 @@
 import Nav from "../component/Nav";
 import Loader from "../component/Loader";
 import "./globals.css";
-import { Toaster } from "sonner";
 
 export default function RootLayout({
   children,
@@ -11,15 +10,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
-      <body
-        className='w-full bg-gray-50'
-        style={{ height: "calc(100vh - 65px)" }}
-      >
-        <Loader />
-        <Nav />
-        {children}
-        <Toaster richColors />
+    <html lang="en">
+      <body className="w-full h-screen bg-gray-50 flex">
+
+        <div className="w-64 p-4 bg-gray-800 text-white">
+          <Nav />
+        </div>
+
+        <main className="flex-1 overflow-y-auto">
+          {children}
+        </main>
       </body>
     </html>
   );

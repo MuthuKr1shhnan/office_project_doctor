@@ -2,7 +2,7 @@
 import logo from "../assets/logo.png";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation"; // ✅ Import usePathname
+import { usePathname } from "next/navigation";
 import Btn from "../component/Btn";
 import Image from "next/image";
 import ProfileDrawer from "../component/ProfileDrawer";
@@ -19,6 +19,7 @@ export default function Nav() {
   const [user, setUser] = useState(null);
   const [otpVerified, setOtpVerified] = useState(false);
   const [roleVerified, setRoleVerified] = useState(false);
+
   const router = useRouter();
   const pathname = usePathname();
   // 🔐 Check auth state and get user role
@@ -35,7 +36,7 @@ export default function Nav() {
           if (userDoc.exists()) {
             setOtpVerified(true);
           }
-          if (userDoc.data().role === "doctor") {
+          if (userDoc.exists() && userDoc.data().role === "patient") {
             setRoleVerified(true);
           }
         } catch (err) {
@@ -57,20 +58,19 @@ export default function Nav() {
     }
   };
 
-  // ✅ Helper function to check if link is active
   const isActiveLink = (link) => pathname === link;
 
   return (
-    <nav className='bg-white  border-b border-slate-200 sticky top-0 z-50'>
-      <div className=' flex flex-wrap items-center justify-between p-3 pr-8 pl-8'>
+    <nav className='bg-white w-64 h-screen border-r border-slate-200 fixed left-0 top-0'>
+      <div className=' flex flex-col  justify-between p-3'>
         {/* Brand */}
-        <Link href='/' className=' flex gap-2 items-center'>
-          <Image src={doctor} alt='Logo' className='h-10 w-auto' />
+        <Link href='/' className='flex gap-2 items-center'>
+          <Image src={doctor} alt='Logo' className='h-12 w-auto' />
           <Image src={logo} alt='Logo' className='h-8 w-auto' />
         </Link>
 
         {/* Desktop Menu */}
-        <div className='hidden md:flex items-center space-x-8'>
+        <div className='hidden md:flex flex-col items-start space-y-6 mt-8'>
           {menu.map((d, i) => (
             <Link
               key={i}
@@ -84,22 +84,20 @@ export default function Nav() {
               {d.label}
             </Link>
           ))}
-        </div>
 
-        {/* Actions */}
-        <div className='hidden md:flex items-center space-x-4'>
-          {otpVerified && user && roleVerified ? (
+          {otpVerified && user ? (
             <Btn
               onClick={() => {
                 setIsOpen(false);
                 setIsOpenDrawer(true);
               }}
               variant='primary'
+              className='w-full'
             >
               {account.label}
             </Btn>
           ) : (
-            <Btn variant='primary'>
+            <Btn variant='primary' className='w-full'>
               <Link href={login.path}>{login.label}</Link>
             </Btn>
           )}
@@ -168,7 +166,12 @@ export default function Nav() {
                     {m.label}
                   </Link>
                 ))}
-                <div className='flex w-full flex-col gap-2'>
+                <div className='flex flex-col-reverse gap-2 w-full justify-center'>
+                  <Btn variant='primary'>
+                    <Link href={"https://office-project-doctor.vercel.app/"}>
+                      For Doctors
+                    </Link>
+                  </Btn>
                   {otpVerified && user && roleVerified ? (
                     <Btn
                       onClick={() => {

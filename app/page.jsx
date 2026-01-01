@@ -36,7 +36,7 @@ export default function Home() {
   }, []);
 
   return (
-    <section className='w-full relative h-[calc(100vh-65px)]'>
+    <section className='w-full relative h-[calc(100dvh)]'>
       <Image
         className='w-full h-full object-cover'
         alt='doctor vs patient image'

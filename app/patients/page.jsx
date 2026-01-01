@@ -84,7 +84,7 @@ export default function DoctorDashboard() {
     return (
       <>
         <div
-          className={`fixed top-0 right-0 h-full w-full bg-white/80 backdrop-blur-xl border-l border-white/40 shadow-[0_0_40px_rgba(0,0,0,0.15)]  flex items-center justify-center
+          className={`fixed  top-0 right-0 h-full w-full bg-white/80 backdrop-blur-xl border-l border-white/40 shadow-[0_0_40px_rgba(0,0,0,0.15)]  flex items-center justify-center
           
           }`}
         >
