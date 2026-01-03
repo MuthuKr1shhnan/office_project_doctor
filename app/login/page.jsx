@@ -31,7 +31,8 @@ const Page = () => {
     const tempRef = doc(db, "tempUsers", uid);
 
     const userSnap = await getDoc(userRef);
-    if (userSnap.exists() && userSnap.role === "doctor") {
+    console.log("\x1b[33mUSER DATA CHECK\x1b[0m", userSnap.data().role);
+    if (userSnap.exists() && userSnap.data().role === "doctor") {
       router.replace("/home");
       return;
     } else {

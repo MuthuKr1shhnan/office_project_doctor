@@ -36,36 +36,29 @@ export default function Home() {
   }, []);
 
   return (
-    <section className='w-full relative h-[calc(100dvh)]'>
-      <Image
-        className='w-full h-full object-cover'
-        alt='doctor vs patient image'
-        src={heroImage}
-        priority
-      />
+   <section
+  className="w-full h-[calc(100dvh)] bg-cover bg-left-4 bg-center relative"
+  style={{ backgroundImage: `url(${heroImage.src})` }}
+>
+  <div className="flex flex-col justify-center items-start h-full px-8">
+    <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-black ">
+      Doctor vs Patient
+    </h1>
 
-      {/* Overlay content */}
-      <div className='absolute bottom-25 md:bottom-20 w-full flex flex-col items-center justify-center text-center px-4'>
-        <h1 className='text-2xl md:text-4xl lg:text-5xl font-bold text-white drop-shadow-lg'>
-          Doctor vs Patient
-        </h1>
-      
-      
+    <p className="mt-4 text-sm md:text-lg lg:text-xl text-black max-w-xl">
+      Connecting healthcare professionals with patients anytime, anywhere.
+    </p>
 
-        <p className='mt-4 text-sm md:text-lg lg:text-xl text-white max-w-xl'>
-          Connecting healthcare professionals with patients anytime, anywhere.
-        </p>
-
-        <Btn
-          variant='primary'
-          className='mt-6 px-6 py-3 text-white rounded-lg shadow-md transition'
-          disabled={loading}
-        >
-          <Link href={"/doctors"}>
-            {loading ? "Loading..." : "Get Started"}
-          </Link>
-        </Btn>
-      </div>
-    </section>
+    <Btn
+      variant="primary"
+      className="mt-6 px-6 py-3"
+      disabled={loading}
+    >
+      <Link href="/patients">
+        {loading ? "Loading..." : "Get Started"}
+      </Link>
+    </Btn>
+  </div>
+</section>
   );
 }

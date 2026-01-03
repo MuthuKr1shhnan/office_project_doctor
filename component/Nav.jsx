@@ -1,30 +1,26 @@
-"use client"; // if using Next.js App Router
-import logo from "../assets/logo.png";
+"use client";
 import { useState, useEffect } from "react";
+import Btn from "./Btn";
+import logo from "../assets/logo.svg";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Btn from "../component/Btn";
-import Image from "next/image";
-import ProfileDrawer from "../component/ProfileDrawer";
 import { auth, db } from "../lib/firebase";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { useRouter } from "next/navigation";
+import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { menu, login, account } from "../config/navData";
-import { Doctor as doctor } from "../assets/icon";
+
+// Mock components and data for demonstration
 
 export default function Nav() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [user, setUser] = useState(null);
   const [otpVerified, setOtpVerified] = useState(false);
   const [roleVerified, setRoleVerified] = useState(false);
-
-  const router = useRouter();
   const pathname = usePathname();
-  // 🔐 Check auth state and get user role
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      console.log("Current User", currentUser);
       if (!currentUser) {
         setUser(null);
       } else {
@@ -36,7 +32,7 @@ export default function Nav() {
           if (userDoc.exists()) {
             setOtpVerified(true);
           }
-          if (userDoc.exists() && userDoc.data().role === "patient") {
+          if (userDoc.exists() && userDoc.data().role === "doctor") {
             setRoleVerified(true);
           }
         } catch (err) {
@@ -47,160 +43,157 @@ export default function Nav() {
     return () => unsubscribe();
   }, [user]);
 
-  // 🚪 Logout
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      router.push("/");
-      localStorage.removeItem("isLoggedIn");
-    } catch (err) {
-      console.error("Logout error:", err);
-    }
-  };
-
   const isActiveLink = (link) => pathname === link;
 
   return (
-    <nav className='bg-white w-64 h-screen border-r border-slate-200 fixed left-0 top-0'>
-      <div className=' flex flex-col  justify-between p-3'>
-        {/* Brand */}
-        <Link href='/' className='flex gap-2 items-center'>
-          <Image src={doctor} alt='Logo' className='h-12 w-auto' />
-          <Image src={logo} alt='Logo' className='h-8 w-auto' />
-        </Link>
+    <div>
+      {/* Desktop Sidebar */}
+      <nav className='hidden h-screen md:block w-[250px]  p-4 border-r border-slate-200 bg-gradient-to-br from-slate-50 to-slate-100 shadow-lg'>
+        <div className='flex flex-col h-full'>
+          {/* Brand */}
+          <Link href={"/"} className="mb-8">
+            <Image src={logo} height={36} alt='logo' />
+          </Link>
+          {/* Desktop Menu */}
+          <div className='flex flex-col flex-1 items-start space-y-4'>
+            {menu.map((d, i) => (
+              <a
+                key={i}
+                href={d.link}
+                className={`font-medium transition-all duration-200 px-4 py-2 rounded-lg w-full ${
+                  isActiveLink(d.link)
+                    ? "bg-indigo-50 text-indigo-600 border-l-4 border-l-indigo-600"
+                    : "text-slate-600 hover:bg-indigo-50 hover:text-indigo-600"
+                }`}
+              >
+                {d.label}
+              </a>
+            ))}
 
-        {/* Desktop Menu */}
-        <div className='hidden md:flex flex-col items-start space-y-6 mt-8'>
-          {menu.map((d, i) => (
-            <Link
-              key={i}
-              href={d.link}
-              className={`font-medium transition-colors ${
-                isActiveLink(d.link)
-                  ? "text-[#FE676E]" // ✅ Active state for mobile
-                  : "text-slate-600 hover:text-[#f97c83]"
-              }`}
-            >
-              {d.label}
-            </Link>
-          ))}
+            <div className="flex flex-col w-full space-y-4 mt-auto">
+              <Btn variant='sec' className='w-full mt-4'>
+                <a
+                  href='https://office-project-doctor.vercel.app/'
+                  className='block w-full'
+                >
+                  For Doctors
+                </a>
+              </Btn>
+              {otpVerified && user && roleVerified ? (
+                <Btn variant='primary' className='w-full'>
+                  <a href='/profile' className='block w-full'>
+                    {account.label}
+                  </a>
+                </Btn>
+              ) : (
+                <Btn variant='primary' className='w-full'>
+                  <a href={login.path} className='block w-full'>
+                    {login.label}
+                  </a>
+                </Btn>
+              )}
+            </div>
+          </div>
+        </div>
+      </nav>
 
-          {otpVerified && user ? (
-            <Btn
-              onClick={() => {
-                setIsOpen(false);
-                setIsOpenDrawer(true);
-              }}
-              variant='primary'
-              className='w-full'
-            >
-              {account.label}
-            </Btn>
-          ) : (
-            <Btn variant='primary' className='w-full'>
-              <Link href={login.path}>{login.label}</Link>
-            </Btn>
-          )}
+      {/* Mobile Header */}
+      <nav className='md:hidden fixed top-0 z-50 w-full p-4 border-b border-slate-200 bg-white shadow-lg'>
+        <div className='flex justify-between items-center'>
+          {/* Brand */}
+         <Link href={"/"}>
+            <Image src={logo} height={36} alt='logo' />
+          </Link>
+          {/* Toggle */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className='inline-flex items-center justify-center w-10 h-10 rounded-lg border-2 border-indigo-600 bg-slate-50 hover:bg-indigo-50 transition-all'
+          >
+            <svg className='w-5 h-5 stroke-indigo-600' viewBox='0 0 24 24'>
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth={2.5}
+                className={`transition-all duration-300 origin-center ${
+                  isOpen ? "rotate-45 translate-y-0" : ""
+                }`}
+                d={isOpen ? "M4 12h16" : "M4 6h16"}
+              />
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth={2.5}
+                className={`transition-opacity duration-300 ${
+                  isOpen ? "opacity-0" : "opacity-100"
+                }`}
+                d='M4 12h16'
+              />
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth={2.5}
+                className={`transition-all duration-300 origin-center ${
+                  isOpen ? "-rotate-45 translate-y-0" : ""
+                }`}
+                d={isOpen ? "M4 12h16" : "M4 18h16"}
+              />
+            </svg>
+          </button>
         </div>
 
-        {/* Mobile Toggle */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className='md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-[#FE636B] bg-slate-50'
-        >
-          <span className='sr-only'>Open menu</span>
-          <svg className='w-5 h-5 stroke-[#FE636B]' viewBox='0 0 24 24'>
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth={2.5}
-              className={`transition-all duration-300 origin-center ${
-                isOpen ? "rotate-45 translate-y-0" : ""
-              }`}
-              d={isOpen ? "M4 12h16" : "M4 6h16"}
-            />
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth={2.5}
-              className={`transition-opacity duration-300 ${
-                isOpen ? "opacity-0" : "opacity-100"
-              }`}
-              d='M4 12h16'
-            />
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth={2.5}
-              className={`transition-all duration-300 origin-center ${
-                isOpen ? "-rotate-45 translate-y-0" : ""
-              }`}
-              d={isOpen ? "M4 12h16" : "M4 18h16"}
-            />
-          </svg>
-        </button>
-
-        {/* Mobile Panel 📱📱📱 */}
+        {/* Mobile Panel */}
         {isOpen && (
           <div
-            className={`fixed top-16 pointer-none left-0 backdrop-blur-md h-full w-full bg-white/1 pl-8 pr-8 shadow-2xl 
-            transform transition-transform duration-800 ease-in-out 
-            z-60 overflow-y-auto ${
-              isOpen ? "translate-x-0" : "translate-x-full"
-            }`}
+            className='fixed top-16 left-0 w-full h-full backdrop-blur-md bg-white/95 shadow-2xl z-50 overflow-y-auto'
             onClick={() => setIsOpen(false)}
           >
-            <div className='w-full md:hidden   pt-10'>
-              <div className='flex flex-col space-y-8'>
-                {menu.map((m, i) => (
-                  <Link
-                    key={i}
-                    href={m.link}
-                    onClick={() => setIsOpen(false)}
-                    className={`font-medium transition-colors ${
-                      isActiveLink(m.link)
-                        ? "text-[#FE676E]" // ✅ Active state for mobile
-                        : "text-slate-600 hover:text-[#f97c83]"
-                    }`}
+            <div className='flex flex-col flex-1 space-y-4 p-8 bg-gradient-to-br from-slate-50 to-slate-100 '>
+              {menu.map((m, i) => (
+                <a
+                  key={i}
+                  href={m.link}
+                  onClick={() => setIsOpen(false)}
+                  className={`font-medium px-4 py-3 rounded-lg transition-all duration-200 ${
+                    isActiveLink(m.link)
+                      ? "bg-indigo-50 text-indigo-600 border-l-4 border-l-indigo-600"
+                      : "text-slate-600 hover:bg-indigo-50 hover:text-indigo-600"
+                  }`}
+                >
+                  {m.label}
+                </a>
+              ))}
+
+              <div className="flex flex-col space-y-4 mt-auto">
+                <Btn variant='sec' className='w-full mt-4'>
+                  <a
+                    href='https://office-project-doctor.vercel.app/'
+                    className='block w-full'
                   >
-                    {m.label}
-                  </Link>
-                ))}
-                <div className='flex flex-col-reverse gap-2 w-full justify-center'>
-                  <Btn variant='primary'>
-                    <Link href={"https://office-project-doctor.vercel.app/"}>
-                      For Doctors
-                    </Link>
+                    For Doctors
+                  </a>
+                </Btn>
+                {otpVerified && user && roleVerified ? (
+                  <Btn
+                    variant='primary'
+                    onClick={() => {
+                      setIsOpen(false);
+                    }}
+                    className='w-full'
+                  >
+                    {account.label}
                   </Btn>
-                  {otpVerified && user && roleVerified ? (
-                    <Btn
-                      onClick={() => {
-                        setIsOpen(false);
-                        setIsOpenDrawer(true);
-                      }}
-                      variant='primary'
-                    >
-                      {account.label}
-                    </Btn>
-                  ) : (
-                    <Btn variant='primary'>
-                      <Link href={login.path}>{login.label}</Link>
-                    </Btn>
-                  )}
-                </div>
+                ) : (
+                  <Btn variant='primary' className='w-full'>
+                    <a href={login.path} className='block w-full'>
+                      {login.label}
+                    </a>
+                  </Btn>
+                )}
               </div>
             </div>
           </div>
         )}
-
-        {/* ✅ Profile Drawer plugged in */}
-        <ProfileDrawer
-          isOpen={isOpenDrawer}
-          onClose={() => setIsOpenDrawer(false)}
-          user={user}
-          onLogout={handleLogout}
-        />
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 }
