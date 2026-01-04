@@ -51,7 +51,7 @@ export default function Nav() {
       <nav className='hidden h-screen md:block w-[250px]  p-4 border-r border-slate-200 bg-gradient-to-br from-slate-50 to-slate-100 shadow-lg'>
         <div className='flex flex-col h-full'>
           {/* Brand */}
-          <Link href={"/"} className="mb-8">
+          <Link href={"/"} className='mb-8'>
             <Image src={logo} height={36} alt='logo' />
           </Link>
           {/* Desktop Menu */}
@@ -70,15 +70,7 @@ export default function Nav() {
               </a>
             ))}
 
-            <div className="flex flex-col w-full space-y-4 mt-auto">
-              <Btn variant='sec' className='w-full mt-4'>
-                <a
-                  href='https://office-project-doctor.vercel.app/'
-                  className='block w-full'
-                >
-                  For Doctors
-                </a>
-              </Btn>
+            <div className='flex flex-col w-full space-y-4 mt-auto'>
               {otpVerified && user && roleVerified ? (
                 <Btn variant='primary' className='w-full'>
                   <a href='/profile' className='block w-full'>
@@ -101,7 +93,7 @@ export default function Nav() {
       <nav className='md:hidden fixed top-0 z-50 w-full p-4 border-b border-slate-200 bg-white shadow-lg'>
         <div className='flex justify-between items-center'>
           {/* Brand */}
-         <Link href={"/"}>
+          <Link href={"/"}>
             <Image src={logo} height={36} alt='logo' />
           </Link>
           {/* Toggle */}
@@ -163,15 +155,7 @@ export default function Nav() {
                 </a>
               ))}
 
-              <div className="flex flex-col space-y-4 mt-auto">
-                <Btn variant='sec' className='w-full mt-4'>
-                  <a
-                    href='https://office-project-doctor.vercel.app/'
-                    className='block w-full'
-                  >
-                    For Doctors
-                  </a>
-                </Btn>
+              <div className='flex flex-col space-y-4 mt-auto'>
                 {otpVerified && user && roleVerified ? (
                   <Btn
                     variant='primary'
