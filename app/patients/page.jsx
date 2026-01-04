@@ -18,6 +18,7 @@ const auth = getAuth();
 export default function DoctorDashboard() {
   const [doctor, setDoctor] = useState(null);
   const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => setDoctor(u));
@@ -73,10 +74,19 @@ export default function DoctorDashboard() {
   };
 
   /* ---------- GUARDS ---------- */
+  if (loading) {
+    return (
+      <div className='w-full mt-auto h-full justify-center items-center bg-white rounded-xl p-12 flex flex-col gap-4'>
+        <div className='flex flex-col items-center justify-center py-20'>
+          <div className='w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4'></div>
+          <p className='text-gray-500'>Loading patients...</p>
+        </div>
+      </div>
+    );
+  }
   if (!doctor) {
     return <div className='p-8'>Please log in as a doctor.</div>;
   }
-
   /* ---------- UI ---------- */
   return (
     <div className='w-full p-4 md:p-12'>

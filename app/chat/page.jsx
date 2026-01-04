@@ -14,6 +14,7 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 
 export default function DoctorChat() {
+  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [chats, setChats] = useState([]);
   const [room, setRoom] = useState(null);
@@ -59,6 +60,7 @@ export default function DoctorChat() {
       }
 
       setChats(list);
+      setLoading(false);
     };
 
     load();
@@ -161,6 +163,16 @@ export default function DoctorChat() {
       hour12: true,
     });
   };
+  if (loading) {
+    return (
+      <div className='w-full mt-auto h-full justify-center items-center bg-white rounded-xl p-12 flex flex-col gap-4'>
+        <div className='flex flex-col items-center justify-center py-20'>
+          <div className='w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4'></div>
+          <p className='text-gray-500'>Loading chats...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='flex h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex-col md:flex-row'>

@@ -1,90 +1,100 @@
 "use client";
 
-import { useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import emailjs from "emailjs-com";
 import Btn from "@/component/Btn";
 import { toast } from "sonner";
-export default function FeedbackForm() {
-  
-  const [formData, setFormData] = useState({
-    email: "",
-    message: "",
-  });
+import { feedbackSchema } from "../../utils/validators";
 
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!formData.email.trim() || !formData.message.trim()) {
-      alert("Email and message are required.");
-      return;
-    }
-
-    setLoading(true);
-
-    emailjs
-      .sendForm(
-        process.env.NEXT_PUBLIC_SERVICE_ID,
-        process.env.NEXT_PUBLIC_TEMPLATE_ID,
-        e.target,
-        process.env.NEXT_PUBLIC_KEY
-      )
-      .then(() => {
-        toast("Message sent successfully.");
-        setFormData({ email: "", message: "" });
-      })
-      .catch(() => {
-        alert("Something went wrong. Please try again.");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
+export default function page() {
   return (
     <section
-      className=' flex items-center justify-center px-4'
-      style={{ height: "calc(100dvh)" }}
+      className='flex items-center justify-center px-4'
+      style={{ height: "calc(100vh)" }}
     >
-      <form
-        onSubmit={handleSubmit}
-        className='w-full p-5 md:p-0 md:max-w-md text-black'
+      <Formik
+        initialValues={{
+          email: "",
+          message: "",
+        }}
+        validationSchema={feedbackSchema}
+        validateOnChange
+        validateOnBlur
+        onSubmit={async (values, { resetForm, setSubmitting }) => {
+          try {
+            await emailjs.send(
+              process.env.NEXT_PUBLIC_SERVICE_ID,
+              process.env.NEXT_PUBLIC_TEMPLATE_ID,
+              values,
+              process.env.NEXT_PUBLIC_KEY
+            );
+
+            toast.success("Feedback sent successfully");
+            resetForm();
+          } catch (error) {
+            toast.error("Something went wrong. Try again later.");
+          } finally {
+            setSubmitting(false);
+          }
+        }}
       >
-        <h2 className='text-3xl font-semibold mb-12'>Give Your Feedback</h2>
+        {({ isSubmitting, isValid, dirty }) => (
+          <Form className='w-full p-5 md:p-0 md:max-w-md text-black space-y-6'>
+            <h2 className='text-3xl font-semibold mb-6'>Give Your Feedback</h2>
 
-        <label className='block mb-2 text-gray-800'>Email</label>
-        <input
-          type='email'
-          name='email'
-          value={formData.email}
-          onChange={handleChange}
-          className='w-full bg-transparent border-b-[.25px] border-gray-600/55 py-2 mb-6 focus:outline-none'
-        />
+            {/* Email */}
+            <div>
+              <label className='block text-xs text-gray-800 mb-1'>
+                Email *
+              </label>
+              <Field
+                type='email'
+                name='email'
+                autoComplete='email'
+                placeholder='you@example.com'
+                className='w-full bg-transparent border-b border-gray-600/55 py-2 focus:outline-none'
+              />
+              <ErrorMessage
+                name='email'
+                component='div'
+                className='text-xs text-red-600 mt-1'
+              />
+            </div>
 
-        <label className='block mb-2 text-gray-800'>Message</label>
-        <textarea
-          name='message'
-          rows='4'
-          value={formData.message}
-          onChange={handleChange}
-          className='w-full bg-transparent border-b border-gray-600/55  py-2 mb-8 resize-none focus:outline-none'
-        />
+            {/* Message */}
+            <div>
+              <label className='block text-xs text-gray-800 mb-1'>
+                Message *
+              </label>
+              <Field
+                as='textarea'
+                name='message'
+                rows={4}
+                placeholder='Write your feedback...'
+                className='w-full bg-transparent border-b border-gray-600/55 py-2 resize-none focus:outline-none'
+              />
+              <ErrorMessage
+                name='message'
+                component='div'
+                className='text-xs text-red-600 mt-1'
+              />
+            </div>
 
-        <Btn
-          type='submit'
-          variant='primary'
-          disabled={loading}
-          className='w-full bg-[#FE656D] text-white py-3 font-medium disabled:opacity-50 hover:bg-[#fc7c83]'
-        >
-          {loading ? "Sending..." : "Send Feedback"}
-        </Btn>
-      </form>
+            <Btn
+              type='submit'
+              variant='primary'
+              className={`w-full py-3 ${
+                !isValid || !dirty || isSubmitting
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
+              }`}
+              disabled={!isValid || !dirty || isSubmitting}
+            >
+              {isSubmitting ? "Sending..." : "Send Feedback"}
+            </Btn>
+          </Form>
+        )}
+      </Formik>
     </section>
   );
 }
